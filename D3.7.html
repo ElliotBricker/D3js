@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>D3</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+
+
+	<script>
+
+	 //   we've been adding DOM elements for each element in our dataset
+	 //   that is one of three posibilities as far as DOM elements to data elements
+	 //   So far we have had   DOM elements < number of data elements.  (it's called the enter selection: ;placeholders)
+	 //
+	 //   Other posibilies:
+	 //   DOM elements > number of data elements  (exit selection)
+	 //   Posibility that they are equivalent      (update selection)
+	    var data = [10, 20];
+		var width = 500;
+		var height = 500;
+
+
+
+
+		var canvas = d3.select("body")
+			.append("svg")
+			.attr("width",width)
+			.attr("height",height);
+
+		//  let's already make a circle on the web page... adding manually and not based on the data element
+		//  When presenting the page, there will be only ONE circle.  Even though we added this circle bgsound
+		//   Why?  Since we alrady have a circle, when we BIND this data to the selection (selectALL),
+		//  the selection is no longer empty (it has one circle already), so the data is bound to the existing circle
+		//   so there are no placeholders for data elements that have no corresponding DOM elements (that is
+		//  what the enter() does.
+		//
+
+		var circle = canvas.append("circle")
+					.attr("cx",50)
+					.attr("cy",100)
+					.attr("r",25);
+
+		var circle = canvas.selectAll("circle")
+					 .data(data)
+					 .attr("fill","red")           // this is the update selection ... already have DOM elements
+					 .enter()
+						.append("circle")
+						.attr("cx", 50)
+						.attr("cy", 50)
+						.attr("fill","green")  // represents the enter selection and will be
+						                       // the circle above the red (since it's y position is 50
+						.attr("r",25);
+
+
+
+
+	</script>
+
+</body>
+</html>
