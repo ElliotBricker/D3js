@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>D3</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+
+
+	<script>
+
+	 //   Transitions in D3... like animations
+	 //   see:   https://www.youtube.com/watch?v=EpeOzq8eDYk&list=PL6il2r9i3BqH9PmbOf5wA5E1wOG3FT22p&index=8
+	 //
+
+	    var width = 700;
+		var height = 700;
+
+
+		var canvas = d3.select("body")
+			.append("svg")
+			.attr("width",width)
+			.attr("height",height);
+
+
+
+		var circle = canvas.append("circle")
+					.attr("cx",450)
+					.attr("cy",200)
+					.attr("r",100);
+
+
+			//  we want to transition the circle to the right
+		circle.transition()
+			.duration(1500)   // 1 and half seconds for the movement
+			.delay(2000)     // only start after the page is show and 2 seconds have transpired
+			.attr("cy", 650)
+			.transition()      // second transition after the ball drops
+               .attr("cx", 100)   // move to the left (because 100 < original x coor of 450 pixels
+
+
+
+
+
+	</script>
+
+</body>
+</html>

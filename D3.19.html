@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+
+
+<!-   atom.io with the installation of the install atom-live-server.  Then cntrl-alt-3 to start the web app srvr  ->
+
+<!-   The Treemap Layout    a hierarchical graph->
+
+<head>
+	<title>D3</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+
+
+	<script>
+
+	     var width = 500;
+			 var height = 500;
+
+          //   use a color scale for the rectangle to assure that the
+					//   whole visualization is not a black blob
+
+					var color = d3.scale.category10();  /// provides a scale of 10 colors
+
+
+
+					var canvas = d3.select("body").append("svg")
+					   .attr("width", width)
+						 .attr("height", height);
+
+				  d3.json("familytreewithvalues.json", function  (dataFamily)	{
+				 			var  treemap = d3.layout.treemap()
+				 				.size([width,height])
+				 				.nodes(dataFamily);  // from nodes method, define where data is coming from
+              console.log(treemap);
+
+							//   for each object  X is the upper left of the rectangle  - absolute starting point from where it's drawn.
+							//   dx is the extent to the right of the upper right of the drawn rectangle
+							//  likewise
+							//  y is the top of the rectangle and dy is the extent down
+
+
+
+							//  bind our data to the document and create a g element for each nodes
+							var cells = canvas.selectAll(".cell")  // a class for each g element
+							    .data(treemap)
+									.enter()
+									.append("g")
+									.attr("class", "cell")
+
+									//  now append the rectangles to the g elements
+							cells.append("rect")
+							               // make all the following properties a function of the treemap layout properties (e.g. x, y, dx, dy) that the treemap gives us.
+							    .attr("x", function (d) { return d.x; })
+									.attr("y", function (d) { return d.y; })
+									.attr("width", function (d) { return d.dx;})
+									.attr("height", function (d) { return d.dy;})   // next line...  don't display object that have children  .. that is Max,Sylvia, and David
+									.attr("fill", function (d) { return d.children ? null : color(d.parent.name);  })
+                              //  need a separator for each of the rectangles to deliniate them
+                  .attr("stroke","#fff")
+
+                 //  append some text to each of the rectangles   ... like names
+							cells.append("text")
+							    .attr("x", function (d)  { return d.x + d.dx / 2})  // display in the middle (x position)
+                  .attr("y", function (d)  { return d.y + d.dy / 2})
+									.attr("text-anchor", "middle")
+									.text(function (d) { return d.children ? null : d.name; })
+
+
+
+
+
+
+
+			 })
+
+
+
+
+
+
+
+
+
+
+	</script>
+
+</body>
+</html>

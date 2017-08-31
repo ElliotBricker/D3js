@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+
+
+<!-  use atom.io with the installation of the install atom-live-server.  Then cntrl-alt-3 to start the web app srvr  ->
+
+<!-   This is the creation of a tree ->
+<head>
+	<title>D3</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+
+
+	<script>
+
+	 var  canvas = d3.select("body").append("svg")
+	     .attr("width", 500)
+			 .attr("height", 500)
+//   diagonal path generator
+
+   var diagonal = d3.svg.diagonal()  // diagonal path generator needs data
+	                                     // expects source object; target object
+           .source({x: 10, y: 0})     // start of path; use source and target accessor function
+           .target({x: 50, y: 300})   // describes ending point of our path
+           .projection(function (d) { return [d.x, d.y]; });
+	 // append the path to the document
+	 canvas.append("path")
+	      .attr("fill", "none")
+				.attr("stroke", "red")
+				.attr('class', 'link')
+				.attr("d", diagonal);   // data generated from the path generator
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   var group = canvas.append("g")
+	      .attr("transform", "translate(300, 300)");
+
+	 //    now use layouts...  each layout takes a set a data and recalculates
+	 //    using the pie layout   -- takes all our data and for each
+	 //    data element it returns the start and end angles and the value
+
+	 var arc = d3.svg.arc()    // set up our arc path generator
+       .innerRadius(200)    //  setting the inner Radius to zero will make this a regular pie chart (not the donut)
+			 .outerRadius(r);
+
+	 var pie = d3.layout.pie()
+		      // use the value accessor function and make it return our data.
+       .value(function (d) { return d;   });
+
+	 var arcs = group.selectAll("arc")          // have to bind our data to our document objects
+        .data(pie(data))
+				.enter()
+				.append("g")
+				.attr("class", "arc");
+
+
+      // we need to create a path out of the three objects.. in the console type
+			//    pie(data)   and inspect the three objects for value and start and end angles
+
+
+			arcs.append("path")
+			    .attr("d",arc )   // fetch the the path data from arc generator
+          .attr("fill", function(d) { return color (d.data);  });
+
+
+					//  append to each group element a text element
+
+			arcs.append("text")
+			    .attr("transform", function (d) { return "translate(" + arc.centroid(d) + ")";  })
+          .attr("text-anchor", "middle")
+					.attr("font-size", "1.5em")
+					.attr("font-family", "Verdana")
+					.attr("font-weight", "bold")
+					.text (function (d) { return d.data; });
+
+	</script>
+
+</body>
+</html>

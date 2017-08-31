@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+ 
+
+<!-  use atom.io with the installation of the install atom-live-server.  Then cntrl-alt-3 to start the web app srvr  ->
+
+<!-   The Histogram Layout ->
+<head>
+	<title>D3</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+
+
+	<script>
+       d3.csv("ages.csv", function (data) {
+
+				 //console.log(data)
+
+				 var map  =data.map (function (i) { return parseInt( i.age )}) //  returns a new array
+        //console.log(map)
+
+// let's create our actual histogram
+         var histogram = d3.layout.histogram()
+				     .bins(5)    // specify the number of intervals   5 bars
+						 (map)       // where out data is coming from
+
+						 //console.log(histogram)
+					var canvas = d3.select("body").append("svg")
+					   .attr("width", 500)
+						 .attr("height", 500);
+
+					var bars = canvas.selectAll(".bar")
+					    .data(histogram)
+							.enter()
+							.append("g")
+
+					bars.append("rect")
+					    .attr("x",function (d) {return  d.x * 5; }) // offsets from left
+							 // svg draws from top left corner
+							.attr("y",0 )  // offset from the top
+              .attr("width", function (d) { return d.dx * 5 - 5})  // the range
+							.attr("height", function (d) {return  d.y * 20; }) // show number of persons that have an age within that interval
+              .attr("fill", "steelblue");
+
+			 })
+
+
+
+
+
+
+
+
+
+
+	</script>
+
+</body>
+</html>

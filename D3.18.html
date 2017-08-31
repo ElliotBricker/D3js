@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<!–    –>
+
+
+
+<!-   The Histogram Layout ->
+<head>
+	<title>D3 tutorial</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+  <style>
+	.axis path,
+	.axis line {
+	    fill: none;
+	    stroke: black;
+	    shape-rendering: crispEdges;
+	}
+
+	.axis text {
+	    font-family: sans-serif;
+	    font-size: 11px;
+	}
+</style>
+
+</head>
+
+<body>
+
+
+	<script>
+
+	     var width = 650;
+			 var height = 500;
+			 var padding = 50;
+			 var numIntervals = 7;
+       d3.csv("ages.csv", function (data) {
+
+				 //console.log(data)
+
+				 var map  = data.map (function (i) { return parseInt( i.age )}) //  returns a new array
+        //console.log(map)
+
+// let's create our actual histogram
+         var histogram = d3.layout.histogram()
+				     .bins(numIntervals)    // specify the number of intervals   5 bars
+						 (map);       // where out data is coming from
+
+         var y = d3.scale.linear()
+				     .domain([0,d3.max(histogram.map(function (i) { return i.length; }))])
+						 .range([0,height]);
+
+				 var x = d3.scale.linear()
+				      .domain([0,d3.max(map)])
+							.range([0,width]);
+
+				 var xAxis = d3.svg.axis()
+				     .scale(x)
+						 .orient("bottom")
+						 .ticks(16);
+
+
+						 //console.log(histogram)
+					var canvas = d3.select("body").append("svg")
+					   .attr("width", width)
+						 .attr("height", height + padding)
+						 .append("g")
+						    .attr("transform", "translate(20,0)");
+
+          var group = canvas.append("g")
+					    .attr("transform", "translate(0," + height + ")")
+							.attr("class", "axis")   //  using the CSS style sheet for crisping up the axis with tick marks and great font
+					    .call(xAxis);
+
+
+					var bars = canvas.selectAll(".bar")
+					    .data(histogram)
+							.enter()
+							.append("g")
+
+					bars.append("rect")
+					    .attr("x",function (d) {return x(d.x) ; }) // offsets from left
+							 // svg draws from top left corner
+							.attr("y", function (d) { return height - y(d.y); } )  // 500 minus the height of the bar
+              .attr("width", function (d) { return x(d.dx)  -0.5})  // the range
+							.attr("height", function (d) {return  y(d.y) ; }) // show number of persons that have an age within that interval
+              .attr("fill", "steelblue");
+
+					bars.append("text")
+					    .attr("x", function (d) { return x(d.x); })
+							.attr("y", function (d) { return height - y(d.y); })
+							.attr("dy", "20px")  // move down 20 pixels
+							.attr("dx",function (d) { return x(d.dx)/2; })
+							.attr("fill", "#fff")
+							.attr("text-anchor", "middle")
+							.text(function (d) { return d.y; });
+
+			 })
+
+
+
+
+
+
+
+
+
+
+	</script>
+
+</body>
+</html>

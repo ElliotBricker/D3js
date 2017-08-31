@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+
+
+<!-  use atom.io with the installation of the install atom-live-server.  Then cntrl-alt-3 to start the web app srvr  ->
+
+<!-   This is the creation of a donut pie chart ->
+<head>
+	<title>D3</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+
+
+	<script>
+
+	 //   Using arc
+	 var  canvas = d3.select("body").append("svg")
+		 .attr("width", 700)
+		 .attr("height", 700);
+
+
+
+	  var group = canvas.append("g")
+	     .attr("transform", "translate(100,100)");
+
+		var r = 100;    // distance from center to outerRadius
+		var p = Math.PI * 2;   // the full circle in radians which is 6.28 ish
+
+    var arc = d3.svg.arc()
+               // distance from the center  to the inner arc
+				.innerRadius(r - 20)      // accessor variables
+
+				.outerRadius(r)       // distance to the out arc from the center
+				.startAngle(0)   //  start of the arc  measured in radians and not Degrees
+				.endAngle(p - 1); //  remove one radian and we see the arc section removed at the upper left of the arc
+
+
+
+  	group.append("path")
+		   .attr("d",arc)
+
+
+
+	</script>
+
+</body>
+</html>

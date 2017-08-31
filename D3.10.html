@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+
+
+<!   use atom.io with the installation of the install atom-live-server.  Then cntrl-alt-3 to start the web app srvr  ->
+<head>
+	<title>D3</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+
+
+	<script>
+
+	 //   Load data from a Json file  (or CSV)
+	 // d3.json("mydata.json", function  (data) { code...})     // callback function
+
+		d3.json("mydata.json", function  (data)	{
+			var  canvas = d3.select("body").append("svg")
+				.attr("width", 500)
+				.attr("height", 500);
+
+			canvas.selectAll("rect")
+			    .data(data)
+				.enter()
+					.append("rect")      // append a rectangle for each data element
+					.attr("width", function (d) { return d.age * 10; })   // d arg refereences our data
+					.attr("height", 48)
+					.attr("y", function (d, i) { return i * 50; })   // index for each data element
+					.attr("fill", "blue")
+
+
+					// add text to each bar
+			canvas.selectAll("text")
+				  .data(data)
+					.enter()
+					    .append("text")
+							.attr("fill", "white")
+							.attr("y", function (d, i) { return i * 50 + 29; })
+							.attr("x", function (d, i) { return i  + 10; })
+							.text(function (d) { return d.name; })
+				})
+	</script>
+
+</body>
+</html>

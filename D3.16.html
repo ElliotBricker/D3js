@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+
+
+<!-  use atom.io with the installation of the install atom-live-server.  Then cntrl-alt-3 to start the web app srvr  ->
+
+<!-   This is the creation of a cluster, pack and bubble layout ->
+<head>
+	<title>D3</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+
+
+	<script>
+
+   var width = 800;
+	 var height = 600;
+
+	 var  canvas = d3.select("body").append("svg")
+	     .attr("width", width)
+			 .attr("height", height)
+			 .append("g")
+			    .attr("transform", "translate(50, 50)");
+
+       var pack = d3.layout.pack()
+			     .size([width, height - 50])  // set size of pack layout
+					 .padding(10)  // provided by the pack layout
+			 d3.json("familytreewithvalues.json", function (data) {
+
+				   var nodes = pack.nodes(data)
+
+			     var node = canvas.selectAll(".node")
+					      .data(nodes)
+								.enter()
+								.append("g")
+								     .attr("class", "node")
+										 .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+					 node.append("circle")
+						     .attr("r", function (d) { return d.r;  })
+                 .attr("fill", "steelblue")
+								 .attr("opacity", 0.25)
+								 .attr("stroke", "#ADADA")
+								 .attr("stroke-width", "2");
+console.log(nodes)
+				    //  add the text to the pack
+						node.append("text")
+						    .text(function (d) { return d.children ? "" : d.name })   /// just show leaf node names
+
+	     })
+
+
+
+
+
+	</script>
+
+</body>
+</html>

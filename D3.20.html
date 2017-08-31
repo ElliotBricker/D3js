@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+ 
+
+<!-   atom.io with the installation of the install atom-live-server.  Then cntrl-alt-3 to start the web app srvr  ->
+
+<!-   Maps          ->
+
+<head>
+	<title>D3</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+
+
+	<script>
+
+	     var width = 760;
+			 var height = 700;
+
+
+					var canvas = d3.select("body").append("svg")
+					   .attr("width", width)
+						 .attr("height", height);
+
+
+           //    map of Sweden divided by it's counties  didn't work so went with a geojson file for the usa
+
+					 //     used a program called QGIS to convert from a shape file .shp file extension (common)
+
+
+				  d3.json("state.geojson", function  (dataUSAstates)	{
+                 //  store each county as a seperate path in seperate g elements
+							var group = canvas.selectAll("g")
+							   .data(dataUSAstates.features)
+								 .enter()
+								 .append("g")     // so we've bound our dataSwedenCounties
+
+								 //  use a projection since earth is not flat
+								 //  see reference at https://github.com/mbostock/d3/wiki/Geo-Projections
+
+
+                               //  initially with d3.geo.mercator() the map is displayed very small so we need
+															 //  to use some of the methods inherent in D3 to clean up  (e.g. the scale method)
+
+							var projection = d3.geo.mercator()
+							.scale(960 / 2 / Math.PI)
+	//.scale(100)
+	             .translate([960 / 2, 500 / 2])
+
+							var path = d3.geo.path().projection(projection);   // name of the geograph path generator
+
+
+                //  append a path to each of our g elements
+							var areas = group.append("path")
+							    .attr("d", path)   // the path data will come from the path generator
+									.attr("class", "area")  //  give it a class and call it area for later CSS manipulations
+									.attr("fill", "steelblue")
+
+
+
+
+
+
+			 });
+
+	</script>
+
+</body>
+</html>
